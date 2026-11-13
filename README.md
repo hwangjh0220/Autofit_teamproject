@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WearCast 🌤️👔
 > **기상청·에어코리아 공공데이터와 내 옷장(User Closet)을 결합한 맞춤형 외출 복장 자동 추천 텔레그램 봇**
 
@@ -164,3 +165,6 @@ python main.py
 * **Branch Rule:** `main`(배포용) $\rightarrow$ `develop`(개발 통합) $\rightarrow$ `feature/<기능명>` 브랜치 분리 작업
 * **Code Review:** Pull Request 생성 시 최소 1명 이상의 팀원 승인(Approve) 후 병합 진행
 * **Security:** 개인 API Key와 Telegram Bot Token이 포함된 `.env` 파일은 절대 Git 커밋에 포함하지 않습니다.
+=======
+# Autofit_teamproject
+>>>>>>> a769546ac96cd4b25b7c661c5c9ccba5bf7f0498
