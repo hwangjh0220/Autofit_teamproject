@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def job_pipeline():
-    print("🤖 [WearCast] 아침 루틴 파이프라인 실행 중...")
+    print("[WearCast] 아침 루틴 파이프라인 실행 중...")
     
     try:
         # 1. 기상청/미세먼지 (팀원 1이 구현 중)
@@ -30,10 +30,10 @@ def job_pipeline():
         print("텔레그램 발송 완료 (현재는 테스트 모드)")
 
     except Exception as e:
-        print(f"❌ 에러 발생: {e}")
+        print(f"에러 발생: {e}")
 
 def main():
-    print("🚀 WearCast 서비스가 시작되었습니다. (스케줄러 대기 중...)")
+    print(" WearCast 서비스가 시작되었습니다. (스케줄러 대기 중...)")
     
     # 테스트할 때는 10초마다 돌려볼 수도 있습니다 (schedule.every(10).seconds)
     schedule.every().day.at("07:30").do(job_pipeline)
