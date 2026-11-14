@@ -8,7 +8,7 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 
-def send_alert(message: str) -> dict:
+def send_telegram_alert(message: str) -> dict:
     """Sends a formatted message to your Telegram chat."""
     if not TOKEN or not CHAT_ID:
         raise ValueError(
@@ -18,11 +18,11 @@ def send_alert(message: str) -> dict:
     payload = {
         "chat_id": CHAT_ID,
         "text": message,
-        "parse_mode": "HTML"  # Allows bold/italic formatting in Telegram!
+        "parse_mode": "HTML"
     }
     response = requests.post(url, json=payload)
     return response.json()
 
 
 if __name__ == "__main__":
-    print(send_alert("<b>Kodi Alert:</b> System test successful!"))
+    print(send_telegram_alert("<b>Kodi Alert:</b> Module test successful!"))
