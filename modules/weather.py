@@ -12,12 +12,37 @@ NX, NY = 60, 121
 # 에어코리아 측정소 이름 (가까운 곳으로 바꾸기)
 STATION = "인계동"
 
+# 강수 형태 (초단기실황 PTY)
 PTY = {"0": "없음", "1": "비", "2": "비/눈", "3": "눈",
        "5": "빗방울", "6": "빗방울/눈날림", "7": "눈날림"}
+# 하늘 상태 (초단기예보 SKY)
+SKY = {"1": "맑음", "3": "구름많음", "4": "흐림"}
+
+
+def _get_sky():
+    """기상청 초단기예보에서 가장 가까운 시각의 하늘 상태"""
+    now = datetime.now()
+    if now.minute < 45:          # 예보는 매시 30분 발표, 45분 이후 제공
+        now -= timedelta(hours=1)
+
+    res = requests.get(
+        "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst",
+        params={
+            "serviceKey": KEY, "dataType": "JSON",
+            "numOfRows": 60, "pageNo": 1,
+            "base_date": now.strftime("%Y%m%d"),
+            "base_time": now.strftime("%H30"),
+            "nx": NX, "ny": NY,
+        }, timeout=10)
+    res.raise_for_status()
+    items = res.json()["response"]["body"]["items"]["item"]
+    sky = sorted((i for i in items if i["category"] == "SKY"),
+                 key=lambda i: i["fcstTime"])
+    return SKY.get(sky[0]["fcstValue"], "알 수 없음")
 
 
 def _get_weather():
-    """기상청 초단기실황"""
+    """기상청 초단기실황 (기온, 습도, 풍속, 강수) + 하늘 상태"""
     now = datetime.now()
     if now.minute < 40:          # 정시 데이터는 매시 40분 이후 제공
         now -= timedelta(hours=1)
@@ -35,13 +60,17 @@ def _get_weather():
     items = res.json()["response"]["body"]["items"]["item"]
     v = {i["category"]: i["obsrValue"] for i in items}
 
+    raining = v["PTY"] != "0"
+    # 비/눈이 오면 그 상태, 아니면 하늘 상태(맑음/구름많음/흐림)
+    condition = PTY.get(v["PTY"], "알 수 없음") if raining else _get_sky()
+
     return {
-        "temp": float(v["T1H"]),
-        "humidity": float(v["REH"]),
-        "wind": float(v["WSD"]),
-        "rain_mm": v["RN1"],
-        "condition": PTY.get(v["PTY"], "알 수 없음"),
-        "rain": v["PTY"] != "0",
+        "temp": float(v["T1H"]),          # 기온(°C)
+        "humidity": float(v["REH"]),      # 습도(%)
+        "wind": float(v["WSD"]),          # 풍속(m/s)
+        "rain_mm": v["RN1"],              # 1시간 강수량
+        "condition": condition,
+        "rain": raining,
     }
 
 
@@ -57,7 +86,7 @@ def _get_dust():
     res.raise_for_status()
     item = res.json()["response"]["body"]["items"][0]
 
-    def to_num(x):
+    def to_num(x):                      # 점검 중이면 "-"가 옴
         try:
             return float(x)
         except (TypeError, ValueError):
