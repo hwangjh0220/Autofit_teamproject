@@ -5,7 +5,7 @@ import schedule
 from dotenv import load_dotenv
 
 # 아직 파일이 없거나 완성되지 않았다면 임시 주석 처리
-# from modules.weather import get_weather_and_dust       
+from modules.weather import get_weather_and_dust       
 # from modules.recommendation import get_ai_outfit_rec  
 # from modules.notifier import send_telegram_alert      
 
@@ -16,8 +16,8 @@ def job_pipeline():
     
     try:
         # 1. 기상청/미세먼지 (팀원 1이 구현 중)
-        # weather_data = get_weather_and_dust()
-        weather_data = {"temp": 15.0, "condition": "맑음", "pm10": 30} # 임시 테스트용 더미 데이터
+        weather_data = get_weather_and_dust()
+        # weather_data = {"temp": 15.0, "condition": "맑음", "pm10": 30} # 임시 테스트용 더미 데이터
         print(f"날씨 데이터 수집 완료: {weather_data}")
 
         # 2. 옷장 & AI 추천 (팀원 2가 구현 중)
