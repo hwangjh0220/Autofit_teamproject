@@ -122,3 +122,42 @@ def generate_outfit_advice(w: dict, wardrobe: list[dict] | None = None) -> str:
 if __name__ == "__main__":
     sample = {"min_temp": 8, "max_temp": 19, "pop": 40, "wind": 3.0, "pm10": 85, "pm25": 30}
     print(generate_outfit_advice(sample))
+
+    # ---------- 5) main.py 연동용 (main.py가 부르는 이름) ----------
+def _num(d: dict, keys: list, default=None):
+    """여러 후보 키 중 처음 발견되는 숫자 값을 반환. 못 찾으면 default."""
+    for k in keys:
+        v = d.get(k)
+        if v in (None, "", "-"):
+            continue
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            continue
+    return default
+
+
+def normalize_weather(raw: dict) -> dict:
+    """weather.py 가 주는 dict(키 이름이 달라도)를 이 모듈이 쓰는 형식으로 변환."""
+    cur = _num(raw, ["temp", "TMP", "tmp", "temperature"])
+    t_min = _num(raw, ["min_temp", "TMN", "tmn", "temp_min", "tmin"], cur)
+    t_max = _num(raw, ["max_temp", "TMX", "tmx", "temp_max", "tmax"], cur)
+    if t_min is None and t_max is None:
+        raise ValueError(f"기온 값을 찾을 수 없습니다. 받은 키: {list(raw.keys())}")
+    t_min = t_max if t_min is None else t_min
+    t_max = t_min if t_max is None else t_max
+    if t_min > t_max:
+        t_min, t_max = t_max, t_min
+    return {
+        "min_temp": t_min,
+        "max_temp": t_max,
+        "pop": _num(raw, ["pop", "POP", "rain_prob"], 0),
+        "wind": _num(raw, ["wind", "WSD", "wsd", "wind_speed"], 0),
+        "pm10": _num(raw, ["pm10", "pm10Value", "pm10_value"], 0),
+        "pm25": _num(raw, ["pm25", "pm25Value", "pm25_value"], 0),
+    }
+
+
+def get_ai_outfit_rec(weather_data: dict) -> str:
+    """main.py 에서 호출: 날씨 dict -> 추천 문장(str)"""
+    return generate_outfit_advice(normalize_weather(weather_data))
