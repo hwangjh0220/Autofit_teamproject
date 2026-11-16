@@ -1,0 +1,21 @@
+[
+  {"name": "민소매", "category": "상의", "min_temp": 28, "max_temp": 45},
+  {"name": "흰색 반팔티", "category": "상의", "min_temp": 20, "max_temp": 45},
+  {"name": "얇은 셔츠", "category": "상의", "min_temp": 17, "max_temp": 27},
+  {"name": "긴팔 티셔츠", "category": "상의", "min_temp": 12, "max_temp": 22},
+  {"name": "회색 맨투맨", "category": "상의", "min_temp": 8, "max_temp": 18},
+  {"name": "검정 니트", "category": "상의", "min_temp": 0, "max_temp": 14},
+  {"name": "히트텍 + 두꺼운 니트", "category": "상의", "min_temp": -30, "max_temp": 6},
+
+  {"name": "면 반바지", "category": "하의", "min_temp": 24, "max_temp": 45},
+  {"name": "면바지", "category": "하의", "min_temp": 15, "max_temp": 28},
+  {"name": "청바지", "category": "하의", "min_temp": 5, "max_temp": 24},
+  {"name": "기모 바지", "category": "하의", "min_temp": -30, "max_temp": 8},
+
+  {"name": "겉옷 필요 없음", "category": "겉옷", "min_temp": 23, "max_temp": 45},
+  {"name": "얇은 가디건", "category": "겉옷", "min_temp": 17, "max_temp": 24},
+  {"name": "청자켓", "category": "겉옷", "min_temp": 12, "max_temp": 19},
+  {"name": "트렌치코트", "category": "겉옷", "min_temp": 9, "max_temp": 17},
+  {"name": "울 코트", "category": "겉옷", "min_temp": -2, "max_temp": 10},
+  {"name": "롱패딩", "category": "겉옷", "min_temp": -30, "max_temp": 4}
+]
