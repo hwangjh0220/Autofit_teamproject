@@ -3,6 +3,7 @@
 import time
 import schedule
 from dotenv import load_dotenv
+import sys
 
 # 아직 파일이 없거나 완성되지 않았다면 임시 주석 처리
 from modules.weather import get_weather_and_dust
@@ -46,4 +47,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--once" in sys.argv:
+        print(">>> 즉시 1회 실행 모드로 시작합니다.")
+        job_pipeline()  # <-- main() 대신 job_pipeline()으로 변경!
+    else:
+        # 기존 스케줄러 실행 모드
+        main()
