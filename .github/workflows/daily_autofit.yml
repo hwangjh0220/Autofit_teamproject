@@ -25,11 +25,8 @@ jobs:
 
       - name: 4. Autofit 파이프라인 1회 실행
         env:
-          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
-          AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          LOCATION_LAT: ${{ secrets.LOCATION_LAT }}
-          LOCATION_LON: ${{ secrets.LOCATION_LON }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python main.py --once
+        run: |
+          python main.py --once
