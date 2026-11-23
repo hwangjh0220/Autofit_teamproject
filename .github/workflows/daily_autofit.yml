@@ -1,0 +1,35 @@
+name: Daily Autofit Morning Briefing
+
+on:
+  schedule:
+    # GitHub Actions는 UTC 기준이므로 한국시간(KST) 오전 7시 = UTC 전날 22시
+    - cron: '0 22 * * *'
+  # GitHub 웹에서 버튼 클릭으로 즉시 수동 테스트 가능
+  workflow_dispatch:
+
+jobs:
+  run-autofit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 2. Python 환경 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 3. 의존성 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 4. Autofit 파이프라인 1회 실행
+        env:
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+          AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LOCATION_LAT: ${{ secrets.LOCATION_LAT }}
+          LOCATION_LON: ${{ secrets.LOCATION_LON }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py --once
