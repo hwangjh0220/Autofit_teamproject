@@ -24,12 +24,12 @@ def job_pipeline():
 
         # 2. 옷장 & AI 추천 (팀원 2가 구현 중)
         ai_recommendation = get_ai_outfit_rec(weather_data)
-        ai_recommendation = "오늘은 맑고 온화하니 셔츠와 슬랙스를 추천합니다!"  # 임시 테스트용
+        #ai_recommendation = "오늘은 맑고 온화하니 셔츠와 슬랙스를 추천합니다!"  # 임시 테스트용
         print(f"AI 추천 완료: {ai_recommendation}")
 
         # 3. 텔레그램 발송 (팀원 3이 구현 중)
         send_telegram_alert(ai_recommendation)
-        print("텔레그램 발송 완료 (현재는 테스트 모드)")
+        print("텔레그램 발송 완료")
 
     except Exception as e:
         print(f"에러 발생: {e}")
@@ -39,7 +39,7 @@ def main():
     print(" WearCast 서비스가 시작되었습니다. (스케줄러 대기 중...)")
 
     # 테스트할 때는 10초마다 돌려볼 수도 있습니다 (schedule.every(10).seconds)
-    schedule.every().day.at("07:30").do(job_pipeline)
+    schedule.every().day.at("09:57").do(job_pipeline)
 
     while True:
         schedule.run_pending()
